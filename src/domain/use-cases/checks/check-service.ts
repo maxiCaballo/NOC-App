@@ -2,7 +2,7 @@ interface CheckServiceUseCase {
 	execute(url: string): Promise<boolean>;
 }
 
-//Ineyeccion de dependencia, que quiero hacer en caso de que sea exitosa o falle el chequeo
+//Ineyeccion de dependencia, que quiero hacer en caso de que el check sea exitoso o falle
 type SuccessCallback = () => void;
 type ErrorCallback = (error: string) => void;
 
