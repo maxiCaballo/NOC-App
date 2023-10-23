@@ -1,3 +1,6 @@
+import { LogModel, LogSeverityLevel } from '../../models/log.model';
+import { LogRepository } from '../../repository/log.repository';
+
 interface CheckServiceUseCase {
 	execute(url: string): Promise<boolean>;
 }
@@ -7,7 +10,11 @@ type SuccessCallback = () => void;
 type ErrorCallback = (error: string) => void;
 
 export class CheckService implements CheckServiceUseCase {
-	constructor(private readonly successCallback: SuccessCallback, private readonly errorCallback: ErrorCallback) {}
+	constructor(
+		private readonly logRepository: LogRepository, //Aca inyecto con que datasource quiero trabajar
+		private readonly successCallback: SuccessCallback,
+		private readonly errorCallback: ErrorCallback,
+	) {}
 
 	public async execute(url: string): Promise<boolean> {
 		try {
@@ -16,13 +23,18 @@ export class CheckService implements CheckServiceUseCase {
 				throw new Error(`Error on check service: ${url}`);
 			}
 
+			const newLog = new LogModel(`Service ${url} is ok!`, LogSeverityLevel.low);
+
+			this.logRepository.saveLog(newLog);
 			this.successCallback();
-			console.log(`${url} is Ok!`);
 
 			return true;
 		} catch (error) {
-			this.errorCallback(`${error}`);
-			console.log(`${error}`);
+			const errorMessage = `${error}`;
+			const newLog = new LogModel(errorMessage, LogSeverityLevel.high);
+
+			this.logRepository.saveLog(newLog);
+			this.errorCallback(errorMessage);
 
 			return false;
 		}
