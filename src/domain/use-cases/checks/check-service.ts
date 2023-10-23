@@ -6,8 +6,8 @@ interface CheckServiceUseCase {
 }
 
 //Ineyeccion de dependencia, que quiero hacer en caso de que el check sea exitoso o falle
-type SuccessCallback = () => void;
-type ErrorCallback = (error: string) => void;
+type SuccessCallback = (() => void) | undefined;
+type ErrorCallback = ((error: string) => void) | undefined;
 
 export class CheckService implements CheckServiceUseCase {
 	constructor(
@@ -26,15 +26,15 @@ export class CheckService implements CheckServiceUseCase {
 			const newLog = new LogModel(`Service ${url} is ok!`, LogSeverityLevel.low);
 
 			this.logRepository.saveLog(newLog);
-			this.successCallback();
+			this.successCallback && this.successCallback();
 
 			return true;
 		} catch (error) {
-			const errorMessage = `${error}`;
+			const errorMessage = `url: ${url} - ${error}`;
 			const newLog = new LogModel(errorMessage, LogSeverityLevel.high);
 
 			this.logRepository.saveLog(newLog);
-			this.errorCallback(errorMessage);
+			this.errorCallback && this.errorCallback(errorMessage);
 
 			return false;
 		}
