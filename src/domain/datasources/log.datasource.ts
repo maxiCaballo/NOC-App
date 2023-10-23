@@ -1,6 +1,6 @@
-import { LogModel, LogSeverityLevel } from '../models/log.model';
+import { Log, LogSeverityLevel } from '../models/log.model';
 
 export abstract class LogDatasource {
-	abstract saveLog(log: LogModel): Promise<void>;
-	abstract getLogs(severityLevel: LogSeverityLevel): Promise<LogModel[]>;
+	abstract saveLog(log: Log): Promise<void>;
+	abstract getLogs(severityLevel: LogSeverityLevel): Promise<Log[]>;
 }

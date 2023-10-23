@@ -4,22 +4,36 @@ export enum LogSeverityLevel {
 	high = 'high',
 }
 
-export class LogModel {
+interface LogProps {
+	level: LogSeverityLevel;
+	message: string;
+	origin: string;
+	createdAt?: Date;
+}
+
+export class Log {
 	public level: LogSeverityLevel;
 	public message: string;
 	public createdAt: Date;
+	public origin: string;
 
-	constructor(message: string, level: LogSeverityLevel) {
-		this.message = message;
-		this.level = level;
-		this.createdAt = new Date();
+	constructor(props: LogProps) {
+		this.message = props.message;
+		this.level = props.level;
+		this.origin = props.origin;
+		this.createdAt = props.createdAt ? props.createdAt : new Date();
 	}
 
-	static jsonParse = (json: string): LogModel => {
+	static jsonParse = (json: string): Log => {
 		const { message, level, createdAt } = JSON.parse(json);
 
 		//seria conveniente hacer validaciones antes de crear la instancia...
-		const log = new LogModel(message, level);
+		const log = new Log({
+			message,
+			level,
+			origin,
+			createdAt,
+		});
 		log.createdAt = new Date(createdAt);
 
 		return log;

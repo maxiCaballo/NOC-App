@@ -1,4 +1,4 @@
-import { LogModel, LogSeverityLevel } from '../../models/log.model';
+import { Log, LogSeverityLevel } from '../../models/log.model';
 import { LogRepository } from '../../repository/log.repository';
 
 interface CheckServiceUseCase {
@@ -23,7 +23,11 @@ export class CheckService implements CheckServiceUseCase {
 				throw new Error(`Error on check service: ${url}`);
 			}
 
-			const newLog = new LogModel(`Service ${url} is ok!`, LogSeverityLevel.low);
+			const newLog = new Log({
+				message: `Service ${url} is ok!`,
+				level: LogSeverityLevel.low,
+				origin: 'check-service.ts',
+			});
 
 			this.logRepository.saveLog(newLog);
 			this.successCallback && this.successCallback();
@@ -31,7 +35,11 @@ export class CheckService implements CheckServiceUseCase {
 			return true;
 		} catch (error) {
 			const errorMessage = `url: ${url} - ${error}`;
-			const newLog = new LogModel(errorMessage, LogSeverityLevel.high);
+			const newLog = new Log({
+				message: errorMessage,
+				level: LogSeverityLevel.high,
+				origin: 'check-service.ts',
+			});
 
 			this.logRepository.saveLog(newLog);
 			this.errorCallback && this.errorCallback(errorMessage);

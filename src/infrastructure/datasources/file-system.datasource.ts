@@ -1,5 +1,5 @@
 import { LogDatasource } from '../../domain/datasources/log.datasource';
-import { LogModel, LogSeverityLevel } from '../../domain/models/log.model';
+import { Log, LogSeverityLevel } from '../../domain/models/log.model';
 import fs from 'fs';
 
 export class FileSystemDatasource implements LogDatasource {
@@ -23,7 +23,7 @@ export class FileSystemDatasource implements LogDatasource {
 			if (!fs.existsSync(path)) fs.writeFileSync(path, '');
 		});
 	};
-	async saveLog(newLog: LogModel): Promise<void> {
+	async saveLog(newLog: Log): Promise<void> {
 		const logAsJson = `${JSON.stringify(newLog)}\n`;
 
 		fs.appendFileSync(this.allLogsPath, logAsJson);
@@ -40,14 +40,14 @@ export class FileSystemDatasource implements LogDatasource {
 		}
 	}
 
-	private getLogsFromFile = (path: string): LogModel[] => {
+	private getLogsFromFile = (path: string): Log[] => {
 		const content = fs.readFileSync(path, 'utf-8');
-		const logs = content.split('\n').map((log) => LogModel.jsonParse(log));
+		const logs = content.split('\n').map((log) => Log.jsonParse(log));
 
 		return logs;
 	};
 
-	async getLogs(severityLevel: LogSeverityLevel): Promise<LogModel[]> {
+	async getLogs(severityLevel: LogSeverityLevel): Promise<Log[]> {
 		switch (severityLevel) {
 			case LogSeverityLevel.low:
 				return this.getLogsFromFile(this.allLogsPath);
