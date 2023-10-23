@@ -9,7 +9,10 @@ NOC(Network Operation Center) o sistema de notificaciones hecho en Node usando T
 
 ```
 PORT=3000
+
+MAILER_SERVICE=
 MAILER_EMAIL=
 MAILER_SECRET_KEY=
+
 PROD=false
 ```

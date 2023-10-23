@@ -1,4 +1,6 @@
+// import 'dotenv/config';
 import { Server } from './presentation/server';
+// import { envs } from './config/plugins/envs.plugin';
 
 //Funcion anonima autoinvocada
 (() => {
@@ -7,4 +9,5 @@ import { Server } from './presentation/server';
 
 function main() {
 	Server.start();
+	// console.log(envs.MAILER_SECRET_KEY, envs.MAILER_EMAIL);
 }
