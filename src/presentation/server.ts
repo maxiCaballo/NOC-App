@@ -15,7 +15,7 @@ export class Server {
 		console.log('Server started....');
 
 		//Mandar email
-		new SendEmailLogs(emailService, fileSystemRepository).execute('caballomaxi@gmail.com');
+		// new SendEmailLogs(emailService, fileSystemRepository).execute('caballomaxi@gmail.com');
 
 		// CronService.createJob('*/2 * * * * *', () => {
 		// 	const url = 'https://google.com';
