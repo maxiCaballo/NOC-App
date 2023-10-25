@@ -38,4 +38,16 @@ export class Log {
 
 		return log;
 	};
+	static fromMongoObject = (object: { [key: string]: any }): Log => {
+		const { message, level, origin, createdAt } = object;
+
+		const log = new Log({
+			message,
+			level,
+			origin,
+			createdAt,
+		});
+
+		return log;
+	};
 }
