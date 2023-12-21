@@ -38,7 +38,9 @@ export class Log {
 
 		return log;
 	};
-	static fromMongoObject = (object: { [key: string]: any }): Log => {
+
+	//Me transforma un obj Log ya se de mongo o postgre a un obj Log de mi dominio
+	static fromObject = (object: { [key: string]: any }): Log => {
 		const { message, level, origin, createdAt } = object;
 
 		const log = new Log({

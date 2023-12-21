@@ -13,6 +13,6 @@ async function main() {
 		dbName: envs.MONGO_DB_NAME,
 	});
 
-	// Server.start();
+	Server.start();
 	// console.log(envs.MAILER_SECRET_KEY, envs.MAILER_EMAIL);
 }

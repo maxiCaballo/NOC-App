@@ -4,11 +4,17 @@ import { CronService } from './cron/cron-service';
 import { LogRepositoryImpl } from '../infrastructure/repositories/log.repository.impl';
 import { EmailService } from './email/email.service';
 import { SendEmailLogs } from '../domain/use-cases/email/send-email-logs';
+import { MongoLogDatasource } from '../infrastructure/datasources/mongo-log.datasource';
+import { PostgresLogDatsource } from '../infrastructure/datasources/postgreSQL-log.datasource';
+import { CheckServiceMultiple } from '../domain/use-cases/checks/check-service-multiple';
 
 //Repositorios
 
 //Este objeto recibe el data source que puede ser mongo, filesystem, postgreSql etc..
-const fileSystemRepository = new LogRepositoryImpl(new FileSystemDatasource());
+const fsLogRepository = new LogRepositoryImpl(new FileSystemDatasource());
+const mongoDBLogRepository = new LogRepositoryImpl(new MongoLogDatasource());
+const postgres = new LogRepositoryImpl(new PostgresLogDatsource());
+
 const emailService = new EmailService();
 export class Server {
 	public static start() {
@@ -17,16 +23,24 @@ export class Server {
 		//Mandar email
 		// new SendEmailLogs(emailService, fileSystemRepository).execute('caballomaxi@gmail.com');
 
-		// CronService.createJob('*/2 * * * * *', () => {
-		// 	const url = 'https://google.com';
-		// 	const localhost = 'http://localhost:3000';
+		CronService.createJob('*/5 * * * * *', () => {
+			const url = 'https://google.com';
+			const localhost = 'http://localhost:3000';
 
-		// 	new CheckService(
-		// 		fileSystemRepository,
-		// 		() => console.log(`url is Ok! : ${url}`),
-		// 		(error) => console.log(error),
-		// 	).execute(url);
-		// });
+			//trabajar con 1 datasource
+			// new CheckService(
+			// 	fsLogRepository,
+			// 	() => console.log(`url is Ok! : ${url}`),
+			// 	(error) => console.log(error),
+			// ).execute(url);
+
+			//trabajar con varios datasource
+			new CheckServiceMultiple(
+				[fsLogRepository, mongoDBLogRepository, postgres],
+				() => console.log(`url is Ok! : ${url}`),
+				(error) => console.log(error),
+			).execute(url);
+		});
 	}
 }
 
