@@ -3,13 +3,13 @@ import { envs } from '../../config/plugins/envs.plugin';
 import nodemailer from 'nodemailer';
 import { Log, LogSeverityLevel } from '../../domain/models/log.model';
 
-interface SendEmailOptions {
+export interface SendEmailOptions {
 	to: string | string[];
 	subject: string;
 	htmlBody: string;
 	attachments?: Attachments[];
 }
-interface Attachments {
+export interface Attachments {
 	filename: string;
 	path: string;
 }

@@ -12,3 +12,6 @@ export const envs = {
 	MONGO_USER: env.get('MONGO_USER').required().asString(),
 	MONGO_PASSWORD: env.get('MONGO_PASSWORD').required().asString(),
 };
+
+//*Con este paquete lo que hago es poner reglas para mis variables de entorno
+//*Importo el paquete dontenv para poder leerlas y luego le asigno mis reglas

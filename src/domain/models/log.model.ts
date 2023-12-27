@@ -25,16 +25,15 @@ export class Log {
 	}
 
 	static jsonParse = (json: string): Log => {
-		const { message, level, createdAt } = JSON.parse(json);
+		const { message, level, createdAt, origin } = JSON.parse(json);
 
 		//seria conveniente hacer validaciones antes de crear la instancia...
 		const log = new Log({
 			message,
 			level,
 			origin,
-			createdAt,
+			createdAt: new Date(createdAt),
 		});
-		log.createdAt = new Date(createdAt);
 
 		return log;
 	};
